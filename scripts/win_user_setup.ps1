@@ -23,10 +23,16 @@ function Create-LocalAdmin {
         $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
         New-LocalUser -Name $Username -Password $SecurePassword -AccountNeverExpires -PasswordNeverExpires
         
-        # Add to Administrators group
-        Add-LocalGroupMember -Group "Administrators" -Member $Username
-        Write-Host "User $Username created successfully and added to Administrators group." -ForegroundColor Green
-        return $true
+        # Try to add to Administrators group (English) or Administrateurs (French)
+        $adminGroup = Get-LocalGroup | Where-Object { $_.Name -eq "Administrators" -or $_.Name -eq "Administrateurs" }
+        if ($adminGroup) {
+            Add-LocalGroupMember -Group $adminGroup.Name -Member $Username
+            Write-Host "User $Username created successfully and added to $($adminGroup.Name) group." -ForegroundColor Green
+            return $true
+        } else {
+            Write-Host "Could not find Administrators/Administrateurs group." -ForegroundColor Red
+            return $false
+        }
     }
     catch {
         Write-Host "Error creating user: $_" -ForegroundColor Red
