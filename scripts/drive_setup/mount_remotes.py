@@ -5,8 +5,28 @@ import ctypes
 # For hiding subprocess windows
 CREATE_NO_WINDOW = 0x08000000
 
-# Folder where drives will be mounted – uses the current system username
+# Folder where drives will be mounted
 MOUNT_FOLDER = os.path.join("C:\\Users", os.getenv('USERNAME'), "Documents\\Drive")
+
+# PowerShell script to clean up old mount folders (except Scripts)
+ps_script = """
+$drivePath = Join-Path -Path ([Environment]::GetFolderPath("MyDocuments")) -ChildPath "drive"
+if (Test-Path -Path $drivePath -PathType Container) {
+    $foldersToDelete = Get-ChildItem -Path $drivePath -Directory | Where-Object { $_.Name -ne "Scripts" }
+    foreach ($folder in $foldersToDelete) {
+        try {
+            Remove-Item -Path $folder.FullName -Recurse -Force
+            Write-Host "Dossier supprimé: $($folder.FullName)"
+        }
+        catch {
+            Write-Host "Erreur lors de la suppression de $($folder.FullName): $_"
+        }
+    }
+}
+"""
+
+# Execute the PowerShell cleanup script
+subprocess.run(["powershell", "-Command", ps_script], creationflags=CREATE_NO_WINDOW)
 
 # Get the list of Rclone remotes
 remotes = subprocess.run(['rclone', 'listremotes'], capture_output=True, text=True).stdout.splitlines()

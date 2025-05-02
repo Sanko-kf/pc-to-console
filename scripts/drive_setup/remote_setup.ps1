@@ -177,9 +177,6 @@ function Start-DriveAndLinks {
 
         $exeProcess = Start-Process @exeArgs -PassThru
 
-        # Wait 0 seconds before launching the PowerShell script
-        Start-Sleep -Seconds 60
-
         # Now run the PowerShell script
         Write-Host "Launching $psScript" -ForegroundColor Cyan
 

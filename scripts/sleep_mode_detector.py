@@ -3,9 +3,12 @@ import win32api
 import subprocess
 import os
 
-# Paths to the .bat files to execute
-BAT_FILE_INACTIVE = ADD_PATH
-BAT_FILE_ACTIVE = ADD_PATH
+# Paths to the .bat files
+USER_DOCUMENTS = os.path.expanduser('~/Documents')
+SCRIPTS_FOLDER = os.path.join(USER_DOCUMENTS, 'Drive', 'Scripts')
+
+BAT_FILE_INACTIVE = os.path.join(SCRIPTS_FOLDER, 'sleep_mode.bat')
+BAT_FILE_ACTIVE = os.path.join(SCRIPTS_FOLDER, 'stop_sleep.bat')
 
 # Inactivity threshold before executing the .bat file (in seconds)
 INACTIVITY_THRESHOLD = 300  # 5 minutes (300 seconds)
