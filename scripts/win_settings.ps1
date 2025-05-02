@@ -11,14 +11,31 @@ Write-Host "Applying dark theme..." -ForegroundColor Green
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Value 0 -Type DWord
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Value 0 -Type DWord
 
-# Apply custom wallpaper
-$wallpaperPath = "C:\Users\aaa\Desktop\vector-background-damask-seamless-pattern-ornement-classique-damas-ancienne-texture-victorienne-sans-soudure-pour-papiers-peints-textile-emballage-modele-baroque-floral-exquis_1217-738.png"
+# Define wallpaper URL and local path
+$wallpaperUrl = "https://github.com/Sanko-kf/pc-to-console/blob/main/wallpaper.png?raw=true"
+$wallpaperPath = "$env:USERPROFILE\Downloads\wallpaper.png"
+
+# Download the wallpaper
+Write-Host "Downloading wallpaper from GitHub..." -ForegroundColor Yellow
+try {
+    # Use TLS 1.2 for secure connection
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri $wallpaperUrl -OutFile $wallpaperPath -ErrorAction Stop
+    Write-Host "Wallpaper downloaded successfully to $wallpaperPath" -ForegroundColor Green
+}
+catch {
+    Write-Host "Failed to download wallpaper: $_" -ForegroundColor Red
+    exit 1
+}
+
+# Apply the wallpaper
 if (Test-Path $wallpaperPath) {
     Write-Host "Applying your custom wallpaper..." -ForegroundColor Green
     Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -Value $wallpaperPath
     rundll32.exe user32.dll, UpdatePerUserSystemParameters
+    Write-Host "Wallpaper applied successfully!" -ForegroundColor Green
 } else {
-    Write-Host "Specified wallpaper file does not exist: $wallpaperPath" -ForegroundColor Red
+    Write-Host "Downloaded wallpaper file does not exist: $wallpaperPath" -ForegroundColor Red
 }
 
 # Hide desktop icons
