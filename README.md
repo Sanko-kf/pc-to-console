@@ -12,9 +12,9 @@ The project relies on a series of scripts and tools designed to simplify the ins
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-### 🎮 Full Gamepad Control
+### Full Gamepad Control
 - Automatically launches Steam Big Picture with a **custom intro video**
 - Designed to work **without keyboard or mouse** (you need mouse and keyboard if you add a specific game on steam)
 - Recommended: use **reWASD** for controller paddle support (see below)
@@ -73,7 +73,7 @@ install.ps1
 
 ---
 
-## 🎮 Adding Games & Emulators
+## Adding Games & Emulators
 
 - **Emulators** must be **manually installed**.
   - You can use **[EmuDeck](https://www.emudeck.com/)** or perform a manual setup.
